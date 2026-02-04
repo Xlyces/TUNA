@@ -24,6 +24,9 @@ if (!USE_MOCK && process.env.STRIPE_SECRET_KEY) {
   console.log("🔧 [DEV] Using mock Stripe payments (no API key required)");
 }
 
+// Export for webhook verification (server-side)
+export { stripe };
+
 /**
  * Create a payment intent for a lesson booking
  * @param amount Amount in HKD cents (e.g., 50000 = HKD 500.00)

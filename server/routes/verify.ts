@@ -1,10 +1,10 @@
 import { Router, Response } from 'express';
 import multer from 'multer';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth';
-import { db } from '@/lib/firebase/config';
+import { db } from '@/lib/firebase/config.server';
 import { doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/lib/firebase/config';
+import { storage } from '@/lib/firebase/config.server';
 import { uploadFileToIPFS, uploadToIPFS } from '@/lib/ipfs/pinata';
 import { extractTextFromImage, extractExamScores } from '@/lib/ocr/tesseract';
 import { mintTutorSBT } from '@/lib/blockchain/mintSBT';

@@ -1,20 +1,40 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
     "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2020"],
     "outDir": "./dist/server",
-    "rootDir": "./server",
+    "rootDir": ".",
     "noEmit": false,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "allowJs": true
   },
   "include": ["server/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src",
+    "components",
+    "tests",
+    "test",
+    "subgraph",
+    "contracts",
+    "lib/api",
+    "lib/blockchain/config.ts",
+    "lib/graphql",
+    "lib/design-system"
+  ]
 }
 

@@ -1,10 +1,10 @@
 import { Router, Response } from 'express';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth';
-import { db } from '@/lib/firebase/config';
+import { db } from '@/lib/firebase/config.server';
 import { collection, addDoc, query, where, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { createPaymentIntent, capturePayment } from '@/lib/stripe/payments';
 import { logLesson } from '@/lib/blockchain/logLesson';
-import { updateUserProfile } from '@/lib/firebase/auth';
+import { updateUserProfile } from '@/lib/firebase/userProfile.server';
 
 const router = Router();
 
@@ -145,7 +145,7 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
         paymentIntentId = paymentIntent.id;
         clientSecret = paymentIntent.client_secret || null;
 
-        await bookingRef.update({
+        await updateDoc(bookingRef, {
           paymentIntentId,
           paymentStatus: 'requires_capture',
           updatedAt: new Date(),
@@ -157,7 +157,7 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
 
     // Deduct credits if used
     if (creditsUsed > 0) {
-      await parentDoc.ref.update({
+      await updateDoc(parentDoc.ref, {
         walletCredits: availableCredits - creditsUsed,
         updatedAt: new Date(),
       });

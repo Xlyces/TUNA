@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from "./config";
+import { CONTRACT_ABI } from "./contractAbi";
 
 export interface LessonLog {
   timestamp: number;
@@ -25,9 +25,17 @@ export async function logLessonOnChain(
     throw new Error("This function must be called from the client side");
   }
 
-  const provider = new ethers.BrowserProvider(window.ethereum);
+  // This client-side helper isn't used by the demo flow; keep it minimal.
+  const contractAddress = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ||
+    process.env.VITE_CONTRACT_ADDRESS ||
+    "") as string;
+  if (!contractAddress) {
+    throw new Error("Contract address not configured");
+  }
+
+  const provider = new ethers.BrowserProvider((window as any).ethereum);
   const signer = await provider.getSigner();
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+  const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
 
   const tx = await contract.logLesson(
     tutorId,
@@ -58,9 +66,12 @@ export async function logLesson(
   lessonLog: LessonLog,
   paymentHash: string
 ): Promise<string> {
-  if (!CONTRACT_ADDRESS) {
-    throw new Error("CONTRACT_ADDRESS not set");
-  }
+  const contractAddress =
+    process.env.CONTRACT_ADDRESS ||
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ||
+    process.env.VITE_CONTRACT_ADDRESS ||
+    "";
+  if (!contractAddress) throw new Error("CONTRACT_ADDRESS not set");
 
   // In production, use a dedicated wallet for gas sponsorship
   const privateKey = process.env.PAYMENT_ORACLE_PRIVATE_KEY;
@@ -76,7 +87,7 @@ export async function logLesson(
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const wallet = new ethers.Wallet(privateKey, provider);
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
+  const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, wallet);
 
   const tx = await contract.logLesson(
     tutorId,

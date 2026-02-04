@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { stripe } from '@/lib/stripe/payments';
-import { db } from '@/lib/firebase/config';
+import { db } from '@/lib/firebase/config.server';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { logLesson } from '@/lib/blockchain/logLesson';
 import { ethers } from 'ethers';

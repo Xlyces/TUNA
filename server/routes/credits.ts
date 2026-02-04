@@ -1,8 +1,8 @@
 import { Router, Response } from 'express';
 import { authenticateToken, AuthenticatedRequest } from '../middleware/auth';
-import { db } from '@/lib/firebase/config';
+import { db } from '@/lib/firebase/config.server';
 import { doc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
-import { updateUserProfile } from '@/lib/firebase/auth';
+import { updateUserProfile } from '@/lib/firebase/userProfile.server';
 
 const router = Router();
 

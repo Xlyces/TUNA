@@ -5,9 +5,16 @@ import { createWorker } from "tesseract.js";
  * @param imageFile The image file to process
  * @returns Extracted text
  */
-export async function extractTextFromImage(imageFile: File): Promise<string> {
+export async function extractTextFromImage(imageFile: File | Blob | Buffer): Promise<string> {
   const worker = await createWorker("eng");
-  const { data } = await worker.recognize(imageFile);
+  // Support Node/Express uploads (Buffer) as well as browser File
+  const input: any =
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    typeof Buffer !== "undefined" && Buffer.isBuffer(imageFile as any)
+      ? new Blob([imageFile as any])
+      : (imageFile as any);
+
+  const { data } = await worker.recognize(input);
   await worker.terminate();
   return data.text;
 }
