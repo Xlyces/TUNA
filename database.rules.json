@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "chats": {
+      "$bookingId": {
+        ".read": "auth != null && (data.child('parentId').val() == auth.uid || data.child('tutorId').val() == auth.uid)",
+        ".write": "auth != null && (data.child('parentId').val() == auth.uid || data.child('tutorId').val() == auth.uid)"
+      }
+    }
+  }
+}
+

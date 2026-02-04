@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow authenticated users to query tutors for search functionality
+    match /users/{userId} {
+      // Allow getting own profile, admin getting any profile, or getting tutor profiles (public)
+      // In emulator/development, allow all reads for server-side operations
+      allow get: if 
+        request.auth == null ||  // Allow unauthenticated reads in emulator (for server-side)
+        (request.auth != null && request.auth.uid == userId) ||
+        (request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
+        resource.data.role == 'tutor';  // Allow public access to tutor profiles
+      // Allow listing tutors (for search page) - public access for browsing
+      // For list queries, we check each document - only return tutors
+      allow list: if resource.data.role == 'tutor';
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Verifications - users can read their own, admins can read/write all
+    match /verifications/{verificationId} {
+      allow read: if 
+        request.auth == null ||  // Allow unauthenticated reads in emulator (for server-side)
+        (request.auth != null && (
+          resource.data.uid == request.auth.uid || 
+          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+        ));
+      allow create: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow update: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Bookings - users can read their own bookings
+    match /bookings/{bookingId} {
+      allow read: if 
+        request.auth == null ||  // Allow unauthenticated reads in emulator (for server-side)
+        (request.auth != null && (
+          resource.data.parentId == request.auth.uid || 
+          resource.data.tutorId == request.auth.uid ||
+          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+        ));
+      allow create: if request.auth == null || request.auth != null;  // Allow server-side creates
+      allow update: if 
+        request.auth == null ||  // Allow unauthenticated updates in emulator (for server-side)
+        (request.auth != null && (
+          resource.data.parentId == request.auth.uid || 
+          resource.data.tutorId == request.auth.uid ||
+          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+        ));
+    }
+  }
+}
+

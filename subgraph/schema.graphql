@@ -1,0 +1,33 @@
+type Tutor @entity {
+  id: ID! # tokenId
+  address: Bytes! # tutor wallet address
+  credHash: Bytes! # IPFS hash of credentials
+  examType: Int! # 0 = DSE, 1 = IB
+  mintedAt: BigInt!
+  lessons: [Lesson!]! @derivedFrom(field: "tutor")
+  totalHours: BigInt!
+  totalEarnings: BigInt!
+  averageRating: BigDecimal!
+  lessonCount: BigInt!
+}
+
+type Lesson @entity {
+  id: ID! # tutorId-timestamp-paymentHash
+  tutor: Tutor!
+  tutorId: BigInt!
+  timestamp: BigInt!
+  durationMins: Int!
+  feeHkd: BigInt!
+  subjectId: Int!
+  rating: Int!
+  paymentHash: Bytes!
+}
+
+type Credential @entity {
+  id: ID! # tokenId
+  tutor: Tutor!
+  credHash: Bytes!
+  examType: Int!
+  storedAt: BigInt!
+}
+

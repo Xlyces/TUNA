@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+/* #region agent log - CSS loaded marker */
+/* This comment serves as a marker that globals.css was processed */
+/* #endregion */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;          /* White background */
+    --foreground: 0 0% 10%;           /* Dark text */
+    --card: 0 0% 100%;                /* White card */
+    --card-foreground: 0 0% 10%;      /* Dark text on cards */
+    --popover: 0 0% 100%;             /* White popover */
+    --popover-foreground: 0 0% 10%;   /* Dark text */
+    --primary: 200 95% 60%;           /* Sky blue #4fc3f7 */
+    --primary-foreground: 0 0% 100%;  /* White text on primary */
+    --secondary: 0 0% 96%;            /* Light gray secondary */
+    --secondary-foreground: 0 0% 10%; /* Dark text */
+    --muted: 0 0% 96%;                /* Muted light gray */
+    --muted-foreground: 0 0% 45%;     /* Medium gray text */
+    --accent: 0 0% 96%;                /* Accent light gray */
+    --accent-foreground: 0 0% 10%;   /* Dark text */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;                /* Light gray border */
+    --input: 0 0% 100%;                /* White input background */
+    --ring: 210 100% 40%;
+    --radius: 0.5rem;
+    --coral: 15 100% 70%;           /* Coral accent #ff8c63 (minimal usage) */
+    --coral-foreground: 0 0% 20%;
+    --aqua: 187 100% 42%;           /* Enhanced aqua #00acc1 */
+    --aqua-foreground: 0 0% 20%;
+    --sky: 200 95% 60%;             /* Sky blue #4fc3f7 */
+    --sky-foreground: 0 0% 20%;
+    --navy: 210 100% 15%;           /* Deep navy #001f3f */
+    --navy-foreground: 0 0% 100%;
+    --cyan: 187 100% 42%;           /* Cyan blue #00bcd4 */
+    --cyan-foreground: 0 0% 20%;
+    --teal: 174 100% 27%;           /* Teal blue #00897b */
+    --teal-foreground: 0 0% 100%;
+    --web3: 255 60% 70%;            /* Web3 purple #8066ff */
+    --web3-foreground: 0 0% 100%;
+    --gradient-ocean: linear-gradient(135deg, #0052cc 0%, #00acc1 100%);
+    --gradient-coral: linear-gradient(135deg, #ff8c63 0%, #ff7046 100%);
+    --gradient-depth: linear-gradient(180deg, #001f3f 0%, #003d5b 50%, #001529 100%);
+    --gradient-wave: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 50%, #0288d1 100%);
+    --gradient-shimmer: linear-gradient(45deg, #00acc1 0%, #00897b 50%, #00695c 100%);
+    --gradient-deep-ocean: radial-gradient(circle, #0277bd 0%, #01579b 50%, #003d5b 100%);
+    --gradient-sunset-water: linear-gradient(135deg, #0288d1 0%, #00acc1 50%, #00897b 100%);
+    --gradient-bubble: radial-gradient(circle at 30% 50%, rgba(79, 195, 247, 0.3) 0%, transparent 50%);
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+  }
+
+  .dark {
+    --background: 0 0% 8%;          /* Even darker gray for dark mode */
+    --foreground: 0 0% 98%;
+    --card: 210 100% 10%;            /* Keep blue cards */
+    --card-foreground: 0 0% 98%;
+    --popover: 210 100% 10%;         /* Keep blue popovers */
+    --popover-foreground: 0 0% 98%;
+    --primary: 200 95% 65%;          /* Brighter sky blue */
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 12%;           /* Dark gray secondary */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 16%;               /* Muted dark gray */
+    --muted-foreground: 0 0% 75%;
+    --accent: 0 0% 18%;              /* Accent dark gray */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 22%;              /* Dark gray border */
+    --input: 0 0% 12%;               /* Dark gray input */
+    --ring: 210 100% 50%;
+    --coral: 15 100% 65%;           /* Slightly darker coral for dark mode */
+    --coral-foreground: 0 0% 100%;
+    --aqua: 187 100% 50%;           /* Brighter aqua for dark mode */
+    --aqua-foreground: 0 0% 20%;
+    --sky: 200 95% 65%;             /* Brighter sky blue for dark mode */
+    --sky-foreground: 0 0% 20%;
+    --navy: 210 100% 20%;           /* Lighter navy for dark mode */
+    --navy-foreground: 0 0% 100%;
+    --cyan: 187 100% 50%;           /* Brighter cyan for dark mode */
+    --cyan-foreground: 0 0% 20%;
+    --teal: 174 100% 35%;           /* Brighter teal for dark mode */
+    --teal-foreground: 0 0% 100%;
+    --web3: 255 60% 75%;            /* Brighter web3 purple for dark mode */
+    --web3-foreground: 0 0% 100%;
+    --gradient-ocean: linear-gradient(135deg, #1a7fff 0%, #1affd2 100%);
+    --gradient-coral: linear-gradient(135deg, #ffa180 0%, #ff8c63 100%);
+    --gradient-depth: linear-gradient(180deg, #001f3f 0%, #0052cc 50%, #0288d1 100%);
+    --gradient-wave: linear-gradient(135deg, #5fc5f8 0%, #3ab7f7 50%, #0399e1 100%);
+    --gradient-shimmer: linear-gradient(45deg, #1abdd4 0%, #1a9a8b 50%, #1a7a6c 100%);
+    --gradient-deep-ocean: radial-gradient(circle, #0388ce 0%, #0266ac 50%, #014d8c 100%);
+    --gradient-sunset-water: linear-gradient(135deg, #0399e1 0%, #1abdd4 50%, #1a9a8b 100%);
+    --gradient-bubble: radial-gradient(circle at 30% 50%, rgba(95, 197, 248, 0.4) 0%, transparent 50%);
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/* Animation Keyframes */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes swim {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(5px) translateY(-5px);
+  }
+  50% {
+    transform: translateX(0) translateY(-10px);
+  }
+  75% {
+    transform: translateX(-5px) translateY(-5px);
+  }
+}
+
+@keyframes bubble {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes bubbles {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes cast {
+  0% {
+    transform: translateY(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 115, 230, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 115, 230, 0.8), 0 0 30px rgba(0, 230, 184, 0.4);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gradient Utility Classes */
+.bg-gradient-ocean {
+  background: var(--gradient-ocean);
+}
+
+.bg-gradient-depth {
+  background: var(--gradient-depth);
+}
+
+.bg-gradient-wave {
+  background: var(--gradient-wave);
+}
+
+.bg-gradient-shimmer {
+  background: var(--gradient-shimmer);
+}
+
+.bg-gradient-deep-ocean {
+  background: var(--gradient-deep-ocean);
+}
+
+.bg-gradient-sunset-water {
+  background: var(--gradient-sunset-water);
+}
+
+.bg-gradient-bubble {
+  background: var(--gradient-bubble);
+}
+
+/* Text Gradient */
+.text-gradient-ocean {
+  background: var(--gradient-ocean);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-wave {
+  background: var(--gradient-wave);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Wave Pattern Background */
+.wave-pattern {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(79, 195, 247, 0.03) 10px,
+      rgba(79, 195, 247, 0.03) 20px
+    );
+}
+
+/* Underwater Light Rays */
+.light-rays {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(79, 195, 247, 0.1) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(0, 188, 212, 0.1) 50%, transparent 70%);
+  background-size: 200% 200%;
+  animation: lightRays 8s ease-in-out infinite;
+}
+
+@keyframes lightRays {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .light-rays {
+    animation: none;
+  }
+}
+

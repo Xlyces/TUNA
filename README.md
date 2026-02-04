@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TUNA Platform
+
+A Web3 tutoring marketplace platform connecting verified HKU/UST tutors with parents, featuring SBT reputation oracles, payment oracle pattern (FPS/Stripe → blockchain), and learn-to-earn credits.
+
+## Tech Stack
+
+- **Frontend**: Vite, React 19, React Router, TypeScript, Tailwind CSS, Shadcn/ui
+- **Backend**: Express.js (API routes)
+- **Web3**: wagmi, viem, RainbowKit, ethers.js
+- **Database**: Firebase (Auth, Firestore, Storage, Realtime DB)
+- **Blockchain**: Hardhat, Solidity 0.8.26, Polygon Mumbai/Mainnet
+- **Payments**: Stripe Connect (FPS integration)
+- **Other**: The Graph, IPFS (Pinata), Tesseract.js, Google Vision API
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ and npm
+- Firebase project
+- Stripe account
+- Polygon Mumbai testnet access
+- Pinata account (for IPFS)
+- Google Cloud account (for Vision API)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd Tuna
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install --legacy-peer-deps
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Fill in your environment variables
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Compile smart contracts:
+```bash
+npm run compile
+```
 
-## Learn More
+5. Run tests:
+```bash
+npm run test:contracts
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. Start development server:
+```bash
+npm run dev
+```
+This will start both the Vite frontend (port 3000) and Express backend (port 3001) concurrently.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+tuna-platform/
+├── src/                    # Frontend source code
+│   ├── pages/             # React Router pages
+│   │   ├── auth/          # Authentication pages
+│   │   ├── dashboard/     # Dashboard pages
+│   │   ├── tutor/         # Tutor pages
+│   │   ├── admin/         # Admin pages
+│   │   └── ...
+│   ├── components/        # React components
+│   └── App.tsx            # Main app component
+├── server/                 # Express backend
+│   ├── routes/            # API route handlers
+│   ├── middleware/        # Express middleware
+│   └── index.ts           # Server entry point
+├── components/            # Shared React components
+├── hooks/                 # React hooks
+├── lib/                   # Utility libraries
+│   ├── blockchain/        # Web3 utilities
+│   ├── firebase/          # Firebase config
+│   ├── stripe/            # Stripe integration
+│   └── ...
+├── contracts/             # Smart contracts
+├── scripts/               # Deployment scripts
+├── subgraph/              # The Graph subgraph
+├── test/                   # Test files
+└── docs/                   # Documentation
+```
 
-## Deploy on Vercel
+## Smart Contracts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### TutorReputation.sol
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The main SBT contract that:
+- Mints non-transferable NFTs for verified tutors
+- Logs lesson completions on-chain
+- Tracks reputation statistics
+- Prevents duplicate payment logging
+
+### Deployment
+
+Deploy to Polygon Mumbai:
+```bash
+npm run deploy:mumbai
+```
+
+Deploy to Polygon Mainnet:
+```bash
+npm run deploy:polygon
+```
+
+## Development
+
+### Running Tests
+
+```bash
+# Smart contract tests
+npm run test:contracts
+
+# Unit tests
+npm test
+
+# E2E tests
+npm run test:e2e
+```
+
+### Building
+
+```bash
+npm run build
+```
+
+## Documentation
+
+See the `docs/` directory for detailed documentation:
+- `ARCHITECTURE.md` - Technical architecture
+- `USER_FLOWS.md` - User journey flows
+- `API.md` - API documentation
+- `CONTRACTS.md` - Smart contract documentation
+- `DEPLOYMENT.md` - Deployment guide
+- `TESTING.md` - Testing guide
+- `BUSINESS_MODEL.md` - Business model and metrics
+
+## License
+
+MIT
