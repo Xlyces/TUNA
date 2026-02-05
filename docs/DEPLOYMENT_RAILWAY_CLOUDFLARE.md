@@ -122,11 +122,12 @@ Visit `https://your-railway-url.up.railway.app/health` - it should return `{"sta
 
 **Build Configuration:**
 - Framework preset: `Vite` (or leave as "None" and configure manually)
-- Build command: `npm run build`
+- Build command: `npm run build:client`
 - Build output directory: `dist`
 - Root directory: `/` (leave empty)
+- **Deploy command**: Leave this EMPTY or remove it entirely (Cloudflare Pages automatically deploys the output directory after build)
 
-**Note**: The build command will run `npm run build` which executes both `build:server` and `vite build`. Since Cloudflare Pages only needs the frontend, you may want to create a separate script, but the current setup should work (the server build will be ignored by Pages).
+**⚠️ CRITICAL**: Do NOT set a deploy command. Cloudflare Pages automatically deploys static files from the output directory. If you see an error about "Missing entry-point to Worker script", it means a deploy command (like `npx wrangler deploy`) was incorrectly configured. Remove any deploy command from the Cloudflare Pages settings.
 
 ### Step 2.3: Add Environment Variables
 
@@ -338,9 +339,24 @@ After getting your Cloudflare Pages URL, update Railway environment variables:
 ### Cloudflare Pages Build Fails
 
 - Check build logs for specific errors
-- Verify `npm run build` works locally
+- Verify `npm run build:client` works locally
 - Ensure `dist/` directory is created
 - Check that all dependencies are in `package.json`
+
+### Cloudflare Pages Deploy Command Error
+
+**Error**: `✘ [ERROR] Missing entry-point to Worker script or to assets directory`
+
+**Cause**: A deploy command (like `npx wrangler deploy`) was configured in Cloudflare Pages settings. This is for Cloudflare Workers, not Pages.
+
+**Fix**:
+1. Go to Cloudflare Dashboard → Pages → Your Project → Settings → Builds & deployments
+2. Find the "Deploy command" field
+3. **Clear it completely** (leave it empty)
+4. Save changes
+5. Redeploy the project
+
+Cloudflare Pages automatically deploys static files from the output directory (`dist`) after the build completes. No deploy command is needed.
 
 ### API Calls Fail from Frontend
 
