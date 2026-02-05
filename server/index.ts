@@ -1,3 +1,7 @@
+// Register TypeScript path aliases for runtime (must be first)
+// This resolves @/ imports to the project root at runtime
+require('module-alias/register');
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

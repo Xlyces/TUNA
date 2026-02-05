@@ -53,6 +53,7 @@
     "graphql": "^16.12.0",
     "graphql-request": "^7.4.0",
     "lucide-react": "^0.454.0",
+    "module-alias": "^2.3.3",
     "multer": "^1.4.5-lts.1",
     "pdf-lib": "^1.17.1",
     "react": "19.2.3",
@@ -66,6 +67,9 @@
     "viem": "^2.0.0",
     "wagmi": "^2.0.0",
     "zod": "^3.23.8"
+  },
+  "_moduleAliases": {
+    "@": "."
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",
