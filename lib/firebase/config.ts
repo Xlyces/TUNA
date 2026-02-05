@@ -30,22 +30,96 @@ const useEmulator = explicitEmulatorFlag ||
                     (inDevMode && !hasApiKey) ||
                     (!isClient && (inDevMode || !process.env.NODE_ENV)); // Server uses emulator in dev or if NODE_ENV not set
 
+// #region agent log
+const envVars = {
+  apiKey: isClient ? env.VITE_FIREBASE_API_KEY : process.env.FIREBASE_API_KEY,
+  authDomain: isClient ? env.VITE_FIREBASE_AUTH_DOMAIN : process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: isClient ? env.VITE_FIREBASE_PROJECT_ID : process.env.FIREBASE_PROJECT_ID,
+  mode: isClient ? env.MODE : process.env.NODE_ENV,
+  isClient,
+  useEmulator,
+  hasApiKey,
+  inDevMode,
+};
+if (typeof window !== 'undefined') {
+  console.log('🔍 Firebase Config Debug:', {
+    hasApiKey: !!envVars.apiKey,
+    apiKeyLength: envVars.apiKey?.length || 0,
+    apiKeyPrefix: envVars.apiKey?.substring(0, 10) || 'none',
+    mode: envVars.mode,
+    useEmulator: envVars.useEmulator,
+    envVarsPresent: {
+      apiKey: !!envVars.apiKey,
+      authDomain: !!envVars.authDomain,
+      projectId: !!envVars.projectId,
+    }
+  });
+  fetch('http://127.0.0.1:7243/ingest/d0f9d9f1-6e4f-4156-b431-e47d122c4d10',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'config.ts:33',message:'Client Firebase config values',data:envVars,timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+}
+// #endregion
+
+// Get raw env values for validation
+const rawApiKey = isClient ? env.VITE_FIREBASE_API_KEY : process.env.FIREBASE_API_KEY;
+const rawAuthDomain = isClient ? env.VITE_FIREBASE_AUTH_DOMAIN : process.env.FIREBASE_AUTH_DOMAIN;
+const rawProjectId = isClient ? env.VITE_FIREBASE_PROJECT_ID : process.env.FIREBASE_PROJECT_ID;
+
+// Warn if missing in production
+if (typeof window !== 'undefined' && !useEmulator && !rawApiKey) {
+  console.error('❌ Firebase API key is missing!');
+  console.error('Please set VITE_FIREBASE_API_KEY in Cloudflare Pages environment variables.');
+  console.error('Go to: Cloudflare Dashboard → Pages → Your Project → Settings → Environment Variables');
+}
+
 const firebaseConfig = {
-  apiKey: (isClient ? env.VITE_FIREBASE_API_KEY : process.env.FIREBASE_API_KEY) || (useEmulator ? "demo-api-key" : ""),
-  authDomain: (isClient ? env.VITE_FIREBASE_AUTH_DOMAIN : process.env.FIREBASE_AUTH_DOMAIN) || (useEmulator ? "demo-tuna.firebaseapp.com" : ""),
-  projectId: (isClient ? env.VITE_FIREBASE_PROJECT_ID : process.env.FIREBASE_PROJECT_ID) || (useEmulator ? "demo-tuna" : ""),
+  apiKey: rawApiKey || (useEmulator ? "demo-api-key" : ""),
+  authDomain: rawAuthDomain || (useEmulator ? "demo-tuna.firebaseapp.com" : ""),
+  projectId: rawProjectId || (useEmulator ? "demo-tuna" : ""),
   storageBucket: (isClient ? env.VITE_FIREBASE_STORAGE_BUCKET : process.env.FIREBASE_STORAGE_BUCKET) || (useEmulator ? "demo-tuna.appspot.com" : ""),
   messagingSenderId: (isClient ? env.VITE_FIREBASE_MESSAGING_SENDER_ID : process.env.FIREBASE_MESSAGING_SENDER_ID) || (useEmulator ? "123456789" : ""),
   appId: (isClient ? env.VITE_FIREBASE_APP_ID : process.env.FIREBASE_APP_ID) || (useEmulator ? "1:123456789:web:abc123" : ""),
 };
+
+// #region agent log
+if (typeof window !== 'undefined') {
+  console.log('🔍 Firebase Config Object:', {
+    apiKey: firebaseConfig.apiKey ? `${firebaseConfig.apiKey.substring(0, 10)}...` : 'EMPTY',
+    authDomain: firebaseConfig.authDomain,
+    projectId: firebaseConfig.projectId,
+    hasValidConfig: !!firebaseConfig.apiKey && firebaseConfig.apiKey !== 'demo-api-key',
+  });
+  fetch('http://127.0.0.1:7243/ingest/d0f9d9f1-6e4f-4156-b431-e47d122c4d10',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'config.ts:50',message:'Client Firebase config object',data:{apiKeyPresent:!!firebaseConfig.apiKey,apiKeyIsDemo:firebaseConfig.apiKey==='demo-api-key',authDomain:firebaseConfig.authDomain,projectId:firebaseConfig.projectId},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+}
+// #endregion
 
 // Initialize Firebase only if it hasn't been initialized
 if (getApps().length === 0) {
   try {
     // Only initialize if we have required config or are using emulator
     if (useEmulator || firebaseConfig.apiKey) {
+      // #region agent log
+      if (typeof window !== 'undefined') {
+        console.log('🚀 Initializing Firebase with config:', {
+          hasApiKey: !!firebaseConfig.apiKey,
+          useEmulator,
+          willUseDemo: !firebaseConfig.apiKey && !useEmulator,
+        });
+        fetch('http://127.0.0.1:7243/ingest/d0f9d9f1-6e4f-4156-b431-e47d122c4d10',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'config.ts:65',message:'About to initialize Firebase',data:{hasApiKey:!!firebaseConfig.apiKey,apiKeyEmpty:!firebaseConfig.apiKey,useEmulator,willFail:!firebaseConfig.apiKey && !useEmulator},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      }
+      // #endregion
       app = initializeApp(firebaseConfig);
+      // #region agent log
+      if (typeof window !== 'undefined') {
+        console.log('✅ Firebase initialized successfully');
+        fetch('http://127.0.0.1:7243/ingest/d0f9d9f1-6e4f-4156-b431-e47d122c4d10',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'config.ts:72',message:'Firebase initialized successfully',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      }
+      // #endregion
     } else {
+      // #region agent log
+      if (typeof window !== 'undefined') {
+        console.warn('⚠️ No Firebase API key found, using demo config (will not work for auth)');
+        fetch('http://127.0.0.1:7243/ingest/d0f9d9f1-6e4f-4156-b431-e47d122c4d10',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'config.ts:78',message:'Using demo Firebase config (no API key)',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+      }
+      // #endregion
       // Create a minimal app for SSR safety
       app = initializeApp({
         apiKey: "demo",
@@ -57,6 +131,12 @@ if (getApps().length === 0) {
       }, "demo");
     }
   } catch (error: any) {
+    // #region agent log
+    if (typeof window !== 'undefined') {
+      console.error("❌ Firebase initialization error:", error.message);
+      fetch('http://127.0.0.1:7243/ingest/d0f9d9f1-6e4f-4156-b431-e47d122c4d10',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'config.ts:90',message:'Firebase initialization error',data:{error:error.message,errorCode:error.code,apiKeyPresent:!!firebaseConfig.apiKey,apiKeyValue:firebaseConfig.apiKey?.substring(0,10)||'empty'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+    }
+    // #endregion
     console.error("Firebase initialization error:", error);
     // Fallback to demo app if initialization fails
     try {
