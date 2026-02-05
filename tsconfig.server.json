@@ -21,7 +21,7 @@
     "isolatedModules": false,
     "allowJs": true
   },
-  "include": ["server/**/*"],
+  "include": ["server/**/*", "lib/firebase/config.server.ts", "lib/firebase/userProfile.server.ts", "lib/firebase/server-auth.ts", "lib/stripe/payments.ts", "lib/stripe/mock-payments.ts", "lib/blockchain/logLesson.ts", "lib/blockchain/mintSBT.ts", "lib/blockchain/contractAbi.ts", "lib/ipfs/pinata.ts", "lib/ocr/tesseract.ts"],
   "exclude": [
     "node_modules",
     "dist",

@@ -23,11 +23,11 @@ export async function mintTutorSBT(
   // Client-side wallet (optional)
   if (typeof window !== "undefined") {
     const provider = new ethers.BrowserProvider((window as any).ethereum);
-    const signer = await provider.getSigner();
+  const signer = await provider.getSigner();
     const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
 
-    const tx = await contract.mintTutor(tutorAddress, credHash, examType);
-    await tx.wait();
+  const tx = await contract.mintTutor(tutorAddress, credHash, examType);
+  await tx.wait();
 
     return tx.hash;
   }
