@@ -1,6 +1,10 @@
 // Register TypeScript path aliases for runtime (must be first)
-// This resolves @/ imports to the project root at runtime
-require('module-alias/register');
+// This resolves @/ imports to dist/server at runtime (where compiled files are)
+const moduleAlias = require('module-alias');
+const path = require('path');
+// In compiled code, __dirname is dist/server/server, so dist/server is one level up
+const distServerPath = path.resolve(__dirname, '..');
+moduleAlias.addAlias('@', distServerPath);
 
 import express from 'express';
 import cors from 'cors';
